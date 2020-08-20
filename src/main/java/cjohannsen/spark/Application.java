@@ -19,8 +19,11 @@ public class Application {
     @Bean
     public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
         return args -> {
-            String logFile = "/home/cjohannsen/spark-3.0.0-bin-hadoop2.7/README.md"; // Should be some file on your system
-            SparkSession spark = SparkSession.builder().appName("Simple Application").getOrCreate();
+            String logFile = "/home/cjohannsen/spark-3.0.0-bin-hadoop2.7/README.md";
+            SparkSession spark = SparkSession.builder()
+                    .appName("Simple Application")
+                    .master("spark://DESKTOP-5KEA4QC.localdomain:7077")
+                    .getOrCreate();
             Dataset<String> logData = spark.read().textFile(logFile).cache();
 
             long numAs = logData.filter((FilterFunction<String>) s -> s.contains("a")).count();

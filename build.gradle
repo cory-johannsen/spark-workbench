@@ -2,6 +2,7 @@ plugins {
     id 'org.springframework.boot' version '2.2.2.RELEASE'
     id 'io.spring.dependency-management' version '1.0.8.RELEASE'
     id 'java'
+    id 'com.github.johnrengelman.shadow' version '2.0.1'
 }
 
 group = 'com.example'
@@ -10,13 +11,22 @@ sourceCompatibility = JavaVersion.VERSION_11
 
 repositories {
     mavenCentral()
+    jcenter()
 }
 
 dependencies {
     compileOnly 'org.projectlombok:lombok:1.18.12'
     annotationProcessor 'org.projectlombok:lombok:1.18.12'
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.apache.spark:spark-sql_2.12:3.0.0'
+    implementation('org.springframework.boot:spring-boot-starter-web') {
+        exclude module: "spring-boot-starter-logging"
+        exclude module: "logback-classic"
+    }
+    implementation('org.apache.spark:spark-sql_2.12:3.0.0') {
+        exclude module: 'org.codehaus.janino:janino'
+        exclude module: 'org.codehaus.janino:commons-compiler'
+    }
+    implementation 'org.codehaus.janino:janino:3.0.16'
+    implementation 'org.codehaus.janino:commons-compiler:3.0.16'
 
     testCompileOnly 'org.projectlombok:lombok:1.18.12'
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
